@@ -12,16 +12,17 @@ create function course_ratio(dept varchar(20))
     declare c_std integer default 0;
     declare counted integer default 0;
     declare done bool default false;
-    declare cursor1 cursor for select count(distinct course_id)
+    declare cursor1 cursor for select count(course_id)
                                         from student natural join takes
                                         where dept_name=dept
                                         group by student.ID;
     declare continue HANDLER for not found set done = true;
     open cursor1;
-        repeat
-            fetch cursor1 into c_std;
+    fetch cursor1 into c_std;
+      repeat
 			set counted = counted +1; 
             set c_count = c_count + c_std; 
+            fetch cursor1 into c_std;
         until done
         end repeat;
 	close cursor1;
