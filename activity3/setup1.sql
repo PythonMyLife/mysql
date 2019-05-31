@@ -46,29 +46,28 @@ CREATE TABLE IF NOT EXISTS cardtype (
     `id` INT UNSIGNED NOT NULL,
     `name` VARCHAR(50) NOT NULL,
     `type` VARCHAR(20) NOT NULL,
-    PRIMARY KEY (`name`),
+    PRIMARY KEY (`name`, `type`),
     FOREIGN KEY (`id`)
         REFERENCES card (`id`)
         ON DELETE CASCADE ON UPDATE CASCADE
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE IF NOT EXISTS cardpacket (
-    `id` INT UNSIGNED AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
     `price` int NOT NULL,
-    PRIMARY KEY (`id`)
+    PRIMARY KEY (`name`)
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
 CREATE TABLE IF NOT EXISTS cardpacketitem (
     `id` INT UNSIGNED AUTO_INCREMENT,
-    `packet_id` INT UNSIGNED NOT NULL,
-    `cardtype_name` VARCHAR(50) NOT NULL,
+    `packet_name` VARCHAR(50) NOT NULL,
+    `card_id` INT UNSIGNED NOT NULL,
     PRIMARY KEY (`id`),
-    FOREIGN KEY (`packet_id`)
-        REFERENCES cardpacket (`id`)
+    FOREIGN KEY (`packet_name`)
+        REFERENCES cardpacket (`name`)
         ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY (`cardtype_name`)
-        REFERENCES cardtype (`name`)
+    FOREIGN KEY (`card_id`)
+        REFERENCES card (`id`)
         ON DELETE CASCADE ON UPDATE CASCADE
 )  ENGINE=INNODB DEFAULT CHARSET=UTF8MB4;
 
@@ -76,6 +75,7 @@ CREATE TABLE IF NOT EXISTS hascard (
     `id` INT UNSIGNED AUTO_INCREMENT,
     `name` VARCHAR(50) NOT NULL,
     `card_id` INT UNSIGNED NOT NULL,
+    `number` INT UNSIGNED DEFAULT 0,
     PRIMARY KEY (`id`),
     FOREIGN KEY (`name`)
         REFERENCES user (`name`)
